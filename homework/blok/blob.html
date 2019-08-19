@@ -6,6 +6,8 @@
 
 <script type="text/javascript">
     Ext.onReady(function(){
+        var num = '';
+        var message ='';
         var win = new Ext.Window({
                 title: '请输入备忘信息',
                 width: 250,
@@ -16,10 +18,10 @@
                 frame: true,
                 items: [{
                 id: 'time',
-                fieldLabel: '时间：',
+                fieldLabel: '时间',
                 }, {
                 id: 'events',
-                fieldLabel: '事件：',
+                fieldLabel: '事件',
                 }],
                 buttons: [{
                 text: '备忘',
@@ -33,61 +35,59 @@
                 }),
                 
                 });
+       
         var progressBar = new Ext.ProgressBar({
-            renderTo: 'task',
-            hidden: true,
-            width:500,
-            });
+                renderTo: 'task',
+                hidden: true,
+                width:500,
+                });
         
-
-
-        var num = '';
-        var message ='';
         var menu1 = new Ext.menu.Item({
-            text:'reset',
-            listeners:{
-             'click':function(){
-                 Ext.getCmp('test1').reset();
+                text:'reset',
+                listeners:{
+                'click':function(){
+                    Ext.getCmp('test1').reset();
         }
     }
         })
+
         var contextmenu = new Ext.menu.Menu({
-            text:'contextMenu',
-        items: [{
-            text: 'Edit',
-            xType:'splitbutton',
+                text:'contextMenu',
+            items: [{
+                text: 'Edit',
+                xType:'splitbutton',
         //     menu:[new Ext.menu.Item({
         //     text:'reset'
         // })]
         menu:[menu1]
            
         },{
-            text: 'Insert',
-            listeners:{
-             'click':function(){
-                win.show();
+                text: 'Insert',
+                listeners:{
+                'click':function(){
+                    win.show();
         }
     }
         }]
     });
 
-    Ext.get(document).on('contextmenu', function(e) {
-        e.preventDefault();
-        contextmenu.showAt(e.getXY());
+        Ext.get(document).on('contextmenu', function(e) {
+                e.preventDefault();
+                contextmenu.showAt(e.getXY());
     });
         var toolbar = new Ext.Toolbar({
           
-            renderTo: 'body',
-            width: 500,
-            height: 30,
-            items:[{
-                text:'Edit',
-                xType:'splitbutton',
-                menu:[new Ext.menu.Item({
-                    text:'reset',
-                    listeners:{
-             'click':function(){
-                 Ext.getCmp('test1').reset();
+                renderTo: 'body',
+                width: 500,
+                height: 30,
+                items:[{
+                    text:'Edit',
+                    xType:'splitbutton',
+                    menu:[new Ext.menu.Item({
+                        text:'reset',
+                        listeners:{
+                        'click':function(){
+                        Ext.getCmp('test1').reset();
                  
         }
     }
@@ -95,97 +95,90 @@
             },{
                 text:'Insert',
                 listeners:{
-             'click':function(){
-                win.show();
-               
-               
+                  'click':function(){
+                   win.show();     
         }
     }
             }
         ]
     });
-    var form = new Ext.form.FormPanel({
+        var form = new Ext.form.FormPanel({
             
-            renderTo:'task',
-            id:'testForm',
-           
-            labelAlign:'right',
-            title:'form',
-            labelWidth:80,
-            buttonAlign:'center',
-            defaultType:'textarea',
-            frame:true,
-            width: 500,
-           
-            height: 300,
-            items:[{
-                id:'test1',
-                autoScroll:true,
-                fieldLabel:'Please Input',
-                name:'text1',
-               
-                width: 300,
-                height: 100,
-                enableKeyEvents: true,
-                listeners:{
-                    keyup: function(){
-                        if(Ext.getCmp('test1').getValue()===''){
-                        Ext.getCmp('button1').setDisabled(true);}
-                        if(!(Ext.getCmp('test1').getValue()==='')){
-                            Ext.getCmp('button1').setDisabled(false)
+                renderTo:'task',
+                id:'testForm',
+            
+                labelAlign:'right',
+                title:'回复',
+                labelWidth:80,
+                buttonAlign:'center',
+                defaultType:'textarea',
+                frame:true,
+                width: 500,
+                height: 300,
+                items:[{
+                    id:'test1',
+                    autoScroll:true,
+                    fieldLabel:'请输入信息',
+                    name:'text1',
+                    width: 300,
+                    height: 100,
+                    enableKeyEvents: true,
+                    listeners:{
+                        keyup: function(){
+                            if(Ext.getCmp('test1').getValue()===''){
+                            Ext.getCmp('button1').setDisabled(true);}
+                            if(!(Ext.getCmp('test1').getValue()==='')){
+                                Ext.getCmp('button1').setDisabled(false)
+                            }
+                        }
+                    },
+                }],
+                buttons:[{
+                    id:'button1',
+                    text:'submit',
+                    disabled:true,
+                    handler:function(){
+                        progressBar.show();
+                        progressBar.wait({
+                        interval: 300,
+                        duration: 3000,
+                        increment: 10,
+                        text: 'Wating for 3s...',
+                        fn: function () {
+                        progressBar.hide();
+                    
+                        Ext.Msg.alert('Progress', "回复成功")
+                        }
+                        })
                         }
                     }
-                },
-            }],
-            buttons:[{
-                id:'button1',
-                text:'submit',
-                disabled:true,
-                handler:function(){
-                    progressBar.show();
-                    progressBar.wait({
-                    interval: 300,
-                    duration: 3000,
-                    increment: 10,
-                    text: 'Wating for 3s...',
-                    fn: function () {
-                    progressBar.hide();
-                  
-                    Ext.Msg.alert('Progress', "Success!")
-                    }
-                    })
-                    }
-                }
-                    ]
+                        ]
 
         });
         var penel = new Ext.Panel({
-            renderTo:'test',
-            title :'备忘录',
-            html:'<div id = "template">时间：事件</div>',
-            shadow:true,
-            draggable:true,
-            autoScroll:true,
-            pageX:150,
-            pageY:50,
-            width:500,
-            height:150,
+                renderTo:'test',
+                title :'备忘录',
+                html:'<div id = "template">时间：事件</div>',
+                shadow:true,
+                draggable:true,
+                autoScroll:true,
+                pageX:150,
+                pageY:50,
+                width:500,
+                height:150,
         });
         var tml = Ext.DomHelper.createTemplate({
         
-            tag:'tr',children:[
-                {tag:'td',html:'<p>{number}:your event: {one}<p>'},
+                tag:'tr',children:[
+                    {tag:'td',html:'<p>待办事件: {number}，{one}<p>'},
              
             ]
         })
-       
-
     })
 </script>
     </head>
     <body>
         <div id="body"></div>
-
         <div id = "task"></div>
         <div id = "test"></div>
     </body>
