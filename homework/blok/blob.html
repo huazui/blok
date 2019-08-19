@@ -1,0 +1,192 @@
+<html>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="../../resources/css/ext-all.css" />
+<script type="text/javascript" src="../../adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../../ext-all.js"></script>
+
+<script type="text/javascript">
+    Ext.onReady(function(){
+        var win = new Ext.Window({
+                title: '请输入备忘信息',
+                width: 250,
+                closeAction: 'hide',
+                items: new Ext.form.FormPanel({
+                defaultType: 'textfield',
+                labelWidth: 60,
+                frame: true,
+                items: [{
+                id: 'time',
+                fieldLabel: '时间：',
+                }, {
+                id: 'events',
+                fieldLabel: '事件：',
+                }],
+                buttons: [{
+                text: '备忘',
+                handler: function(){
+                num = Ext.getCmp('time').getValue();
+                message = Ext.getCmp('events').getValue();
+                tml.append('template',{number:num,one:message});
+                win.hide();
+                }
+                }]
+                }),
+                
+                });
+        var progressBar = new Ext.ProgressBar({
+            renderTo: 'task',
+            hidden: true,
+            width:500,
+            });
+        
+
+
+        var num = '';
+        var message ='';
+        var menu1 = new Ext.menu.Item({
+            text:'reset',
+            listeners:{
+             'click':function(){
+                 Ext.getCmp('test1').reset();
+        }
+    }
+        })
+        var contextmenu = new Ext.menu.Menu({
+            text:'contextMenu',
+        items: [{
+            text: 'Edit',
+            xType:'splitbutton',
+        //     menu:[new Ext.menu.Item({
+        //     text:'reset'
+        // })]
+        menu:[menu1]
+           
+        },{
+            text: 'Insert',
+            listeners:{
+             'click':function(){
+                win.show();
+        }
+    }
+        }]
+    });
+
+    Ext.get(document).on('contextmenu', function(e) {
+        e.preventDefault();
+        contextmenu.showAt(e.getXY());
+    });
+        var toolbar = new Ext.Toolbar({
+          
+            renderTo: 'body',
+            width: 500,
+            height: 30,
+            items:[{
+                text:'Edit',
+                xType:'splitbutton',
+                menu:[new Ext.menu.Item({
+                    text:'reset',
+                    listeners:{
+             'click':function(){
+                 Ext.getCmp('test1').reset();
+                 
+        }
+    }
+                })]
+            },{
+                text:'Insert',
+                listeners:{
+             'click':function(){
+                win.show();
+               
+               
+        }
+    }
+            }
+        ]
+    });
+    var form = new Ext.form.FormPanel({
+            
+            renderTo:'task',
+            id:'testForm',
+           
+            labelAlign:'right',
+            title:'form',
+            labelWidth:80,
+            buttonAlign:'center',
+            defaultType:'textarea',
+            frame:true,
+            width: 500,
+           
+            height: 300,
+            items:[{
+                id:'test1',
+                autoScroll:true,
+                fieldLabel:'Please Input',
+                name:'text1',
+               
+                width: 300,
+                height: 100,
+                enableKeyEvents: true,
+                listeners:{
+                    keyup: function(){
+                        if(Ext.getCmp('test1').getValue()===''){
+                        Ext.getCmp('button1').setDisabled(true);}
+                        if(!(Ext.getCmp('test1').getValue()==='')){
+                            Ext.getCmp('button1').setDisabled(false)
+                        }
+                    }
+                },
+            }],
+            buttons:[{
+                id:'button1',
+                text:'submit',
+                disabled:true,
+                handler:function(){
+                    progressBar.show();
+                    progressBar.wait({
+                    interval: 300,
+                    duration: 3000,
+                    increment: 10,
+                    text: 'Wating for 3s...',
+                    fn: function () {
+                    progressBar.hide();
+                  
+                    Ext.Msg.alert('Progress', "Success!")
+                    }
+                    })
+                    }
+                }
+                    ]
+
+        });
+        var penel = new Ext.Panel({
+            renderTo:'test',
+            title :'备忘录',
+            html:'<div id = "template">时间：事件</div>',
+            shadow:true,
+            draggable:true,
+            autoScroll:true,
+            pageX:150,
+            pageY:50,
+            width:500,
+            height:150,
+        });
+        var tml = Ext.DomHelper.createTemplate({
+        
+            tag:'tr',children:[
+                {tag:'td',html:'<p>{number}:your event: {one}<p>'},
+             
+            ]
+        })
+       
+
+    })
+</script>
+    </head>
+    <body>
+        <div id="body"></div>
+
+        <div id = "task"></div>
+        <div id = "test"></div>
+    </body>
+</html> 
